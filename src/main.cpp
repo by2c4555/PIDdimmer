@@ -1,5 +1,5 @@
 #include <LiquidCrystal_I2C.h>
-#include <Adafruit_MAX31865.h>
+#include <Adafruit_MAX31865.h>  // https://github.com/adafruit/Adafruit_MAX31865/tree/master
 #include <RBDdimmer.h>
 #include <PID_v1.h>
 
@@ -16,9 +16,9 @@
 // 100.0 for PT100, 1000.0 for PT1000
 #define RNOMINAL  100.0
 // Use software SPI: CS, DI, DO, CLK
-// Adafruit_MAX31865 thermo = Adafruit_MAX31865(10, 11, 12, 13);
+Adafruit_MAX31865 thermo = Adafruit_MAX31865(10, 11, 12, 13);
 // use hardware SPI, just pass in the CS pin
-Adafruit_MAX31865 thermo = Adafruit_MAX31865(5);
+//Adafruit_MAX31865 thermo = Adafruit_MAX31865(5);
 
 
 /// 
@@ -96,7 +96,7 @@ if (fault) {
   double temp = thermo.temperature(RNOMINAL, RREF);
   Serial.print("Temperature Read : ");
   Serial.println(temp);
-  
+
   Input = temp;
   Serial.print("Temperature Input : ");
   Serial.println(Input);
