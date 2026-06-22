@@ -30,6 +30,7 @@ dimmerLamp dimmer(DIMMER_PIN);
 
 // set the LCD address to 0x27 for a 16 chars and 2 line display
 LiquidCrystal_I2C lcd(0x27, 20, 4);
+ 
 //Define Variables we'll be connecting to
 double Setpoint = 30;
 double consKp=80, consKi=2.4, consKd=1.15;
@@ -44,10 +45,9 @@ void setup()
 {
   
   Serial.begin(9600);
-  thermo.begin(MAX31865_3WIRE);  // set to 2WIRE or 4WIRE as necessary
-  lcd.init();                      // initialize the lcd
+  thermo.begin(MAX31865_3WIRE);  // set to 2WIRE or 4WIRE as necessary    
+  lcd.begin(20, 4);                   
   lcd.backlight();
-  lcd.begin(20, 4);                     // set up the LCD's number of columns and rows:
   lcd.print("PID Control");
   dimmer.begin(NORMAL_MODE, ON);
 
