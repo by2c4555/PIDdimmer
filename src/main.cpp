@@ -46,7 +46,7 @@ void setup()
   
   Serial.begin(9600);
   thermo.begin(MAX31865_3WIRE);  // set to 2WIRE or 4WIRE as necessary    
-  lcd.begin(20, 4);                   
+  lcd.begin(20, 4);       //     lcd.begin(); for Arduino IDE        
   lcd.backlight();
   lcd.print("PID Control");
   dimmer.begin(NORMAL_MODE, ON);
