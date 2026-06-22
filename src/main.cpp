@@ -94,6 +94,9 @@ if (fault) {
   //Input = thermo.temperature(RNOMINAL, RREF);
 
   double temp = thermo.temperature(RNOMINAL, RREF);
+  Serial.print("Temperature Read : ");
+  Serial.println(temp);
+  
   Input = temp;
   Serial.print("Temperature Input : ");
   Serial.println(Input);
