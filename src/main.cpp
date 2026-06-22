@@ -107,21 +107,21 @@ if (fault) {
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Temp=");
-  lcd.print(Input, 2);   // print double directly with 2 decimals
+  lcd.print(Input, 0);   // print double directly with 2 decimals
   lcd.print('C');
   lcd.print(' Set=');
-  lcd.print(Setpoint, 2);   // print double directly with 2 decimals
+  lcd.print(Setpoint, 0);   // print double directly with 2 decimals
   lcd.print('C');
   lcd.setCursor(0, 1);
   // lcd.print("Output=");
   // lcd.print(Output, 2);   // print double directly with 2 decimals
   lcd.print("  Kp=");
-  lcd.print(consKp, 2);   // print double directly with 2 decimals
+  lcd.print(consKp, 0);   // print double directly with 2 decimals
   lcd.print("  Ki=");
-  lcd.print(consKi, 2);   // print double directly with 2 decimals
+  lcd.print(consKi, 1);   // print double directly with 2 decimals
   lcd.setCursor(0, 2);
   lcd.print("  Kd=");
-  lcd.print(consKd, 2);   // print double directly with 2 decimals
+  lcd.print(consKd, 1);   // print double directly with 2 decimals
 
   Serial.print("PID Compute output : ");
   Serial.println(Output);
