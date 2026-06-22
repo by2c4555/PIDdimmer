@@ -91,7 +91,14 @@ if (fault) {
 {
 
 // Read Thermo Temp (convert raw RTD reading to temperature in °C)
-  Input = thermo.temperature(RNOMINAL, RREF);
+  //Input = thermo.temperature(RNOMINAL, RREF);
+
+  double temp = thermo.temperature(RNOMINAL, RREF);
+  Input = temp;
+  Serial.print("Temperature Input : ");
+  Serial.println(Input);
+
+
 // Calculate PID
   myPID.Compute();
 
@@ -105,8 +112,6 @@ if (fault) {
   
  
 
-  Serial.print("Temperature Input : ");
-  Serial.println(Input);
   Serial.print("PID Compute output : ");
   Serial.println(Output);
 
