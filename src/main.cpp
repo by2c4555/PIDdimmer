@@ -108,10 +108,10 @@ if (fault) {
   lcd.setCursor(0, 0);
   lcd.print("Temp=");
   lcd.print(Input, 2);   // print double directly with 2 decimals
-  lcd.print((char)223);  // degree symbol
   lcd.print('C');
-  lcd.print(' Setpoint=');
+  lcd.print(' Set=');
   lcd.print(Setpoint, 2);   // print double directly with 2 decimals
+  lcd.print('C');
   lcd.setCursor(0, 1);
   // lcd.print("Output=");
   // lcd.print(Output, 2);   // print double directly with 2 decimals
