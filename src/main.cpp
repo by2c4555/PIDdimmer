@@ -16,9 +16,11 @@
 // 100.0 for PT100, 1000.0 for PT1000
 #define RNOMINAL  100.0
 // Use software SPI: CS, DI, DO, CLK
-Adafruit_MAX31865 thermo = Adafruit_MAX31865(10, 11, 12, 13);
+//Adafruit_MAX31865 thermo = Adafruit_MAX31865(10, 11, 12, 13);
 // use hardware SPI, just pass in the CS pin
-//Adafruit_MAX31865 thermo = Adafruit_MAX31865(5);
+Adafruit_MAX31865 thermo = Adafruit_MAX31865(10);
+
+
 
 
 /// 
