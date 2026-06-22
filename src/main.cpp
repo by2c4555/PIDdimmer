@@ -106,12 +106,22 @@ if (fault) {
 // Display results
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print(" Temp1=");
+  lcd.print("Temp=");
   lcd.print(Input, 2);   // print double directly with 2 decimals
   lcd.print((char)223);  // degree symbol
   lcd.print('C');
-  
- 
+  lcd.print(' Setpoint=');
+  lcd.print(Setpoint, 2);   // print double directly with 2 decimals
+  lcd.setCursor(0, 1);
+  // lcd.print("Output=");
+  // lcd.print(Output, 2);   // print double directly with 2 decimals
+  lcd.print("  Kp=");
+  lcd.print(consKp, 2);   // print double directly with 2 decimals
+  lcd.print("  Ki=");
+  lcd.print(consKi, 2);   // print double directly with 2 decimals
+  lcd.setCursor(0, 2);
+  lcd.print("  Kd=");
+  lcd.print(consKd, 2);   // print double directly with 2 decimals
 
   Serial.print("PID Compute output : ");
   Serial.println(Output);
