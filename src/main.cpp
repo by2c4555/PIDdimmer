@@ -86,11 +86,9 @@ if (fault) {
   }else {
   // Read Thermo Temp (convert raw RTD reading to temperature in °C)
     Input = thermo.temperature(RNOMINAL, RREF);
-    // Serial.print("Temperature Input : ");
-    // Serial.println(Input);
   // Calculate PID
     myPID.Compute();
-  // Display results
+  // Display results on the LCD
     lcd.clear();
     lcd.setCursor(0, 0); // set the cursor to column 0, line 0
     lcd.print("Temp=");
@@ -108,8 +106,7 @@ if (fault) {
     lcd.print("  Kd=");
     lcd.print(consKd, 1);   // print double directly with 2 decimals
     
-    // Serial.print("PID Compute output : ");
-    // Serial.println(Output);
+    // Update the dimmer power based on PID output
     dimmer.setPower(Output);
   }
   delay(1000);  
