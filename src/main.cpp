@@ -60,6 +60,10 @@ void loop()
 uint8_t fault = thermo.readFault();
 if (fault) {
     Serial.print("Fault 0x"); Serial.println(fault, HEX);
+    Serial.print("Temperature Input : ");
+    Serial.println(Input);
+    Serial.print("PID Compute output : ");
+    Serial.println(Output);
     if (fault & MAX31865_FAULT_HIGHTHRESH) {
       Serial.println("RTD High Threshold"); 
     }
@@ -82,8 +86,8 @@ if (fault) {
   }else {
   // Read Thermo Temp (convert raw RTD reading to temperature in °C)
     Input = thermo.temperature(RNOMINAL, RREF);
-    Serial.print("Temperature Input : ");
-    Serial.println(Input);
+    // Serial.print("Temperature Input : ");
+    // Serial.println(Input);
   // Calculate PID
     myPID.Compute();
   // Display results
@@ -104,8 +108,8 @@ if (fault) {
     lcd.print("  Kd=");
     lcd.print(consKd, 1);   // print double directly with 2 decimals
     
-    Serial.print("PID Compute output : ");
-    Serial.println(Output);
+    // Serial.print("PID Compute output : ");
+    // Serial.println(Output);
     dimmer.setPower(Output);
   }
   delay(1000);  
