@@ -45,6 +45,15 @@ void setup()
   Serial.println("PID Control of PT100 with MAX31865 and Dimmer");
   thermo.begin(MAX31865_3WIRE);  // set to 2WIRE or 4WIRE as necessary  
   delay(1000);
+  uint16_t rtd = thermo.readRTD();
+  Serial.print("RTD value: "); Serial.println(rtd);
+  float ratio = rtd;
+  ratio /= 32768;
+  Serial.print("Ratio = "); Serial.println(ratio,8);
+  Serial.print("Resistance = "); Serial.println(RREF*ratio,8);
+  Serial.print("Temperature = "); Serial.println(thermo.temperature(RNOMINAL, RREF));
+
+
   Serial.println("MAX31865 3-Wire PT100 RTD Sensor --Initialized");  
   lcd.begin(20, 4);       //     lcd.begin(); for Arduino IDE        
   lcd.backlight();
