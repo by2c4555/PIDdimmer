@@ -16,10 +16,7 @@
 // use hardware SPI, just pass in the CS pin
 Adafruit_MAX31865 thermo = Adafruit_MAX31865(10);
 
-
-
-
-/// 
+// Create a dimmerLamp object
 #define DIMMER_PIN 3
 #define ZC_PIN 2
 dimmerLamp dimmer(DIMMER_PIN);
@@ -51,8 +48,7 @@ void setup()
 
 //turn the PID on
   myPID.SetMode(AUTOMATIC);
-  myPID.SetOutputLimits(0, 255);
-  myPID.SetControllerDirection(DIRECT);
+  myPID.SetOutputLimits(0, 100);  // Output will be between 0 and 100
   myPID.SetTunings(consKp, consKi, consKd);
 
 }
@@ -83,48 +79,34 @@ if (fault) {
       Serial.println("Under/Over voltage"); 
     }
     thermo.clearFault();
-  } else 
-{
-
-// Read Thermo Temp (convert raw RTD reading to temperature in °C)
-  //Input = thermo.temperature(RNOMINAL, RREF);
-
-  Input = thermo.temperature(RNOMINAL, RREF);
-  Serial.print("Temperature Input : ");
-  Serial.println(Input);
-
-
-// Calculate PID
-  myPID.Compute();
-
-// Display results
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("Temp=");
-  lcd.print(Input, 0);   // print double directly with 2 decimals
-  lcd.print('C');
-  lcd.print("Set=");
-  lcd.print(Setpoint, 0);   // print double directly with 2 decimals
-  lcd.print('C');
-  lcd.setCursor(0, 1);
-  // lcd.print("Output=");
-  // lcd.print(Output, 2);   // print double directly with 2 decimals
-  lcd.print("  Kp=");
-  lcd.print(consKp, 0);   // print double directly with 2 decimals
-  lcd.print("  Ki=");
-  lcd.print(consKi, 1);   // print double directly with 2 decimals
-  lcd.setCursor(0, 2);
-  lcd.print("  Kd=");
-  lcd.print(consKd, 1);   // print double directly with 2 decimals
-
-  Serial.print("PID Compute output : ");
-  Serial.println(Output);
-
-
-  double write = map(Output, 0, 255, 0, 100);
-  dimmer.setPower(write);
-}
-
-   
+  }else {
+  // Read Thermo Temp (convert raw RTD reading to temperature in °C)
+    Input = thermo.temperature(RNOMINAL, RREF);
+    Serial.print("Temperature Input : ");
+    Serial.println(Input);
+  // Calculate PID
+    myPID.Compute();
+  // Display results
+    lcd.clear();
+    lcd.setCursor(0, 0); // set the cursor to column 0, line 0
+    lcd.print("Temp=");
+    lcd.print(Input, 0);   // print double directly with 2 decimals
+    lcd.print('C');
+    lcd.print("Set=");
+    lcd.print(Setpoint, 0);   // print double directly with 2 decimals
+    lcd.print('C');
+    lcd.setCursor(0, 1); // set the cursor to column 0, line 1
+    lcd.print("  Kp=");
+    lcd.print(consKp, 0);   // print double directly with 2 decimals
+    lcd.print("  Ki=");
+    lcd.print(consKi, 1);   // print double directly with 2 decimals
+    lcd.setCursor(0, 2);
+    lcd.print("  Kd=");
+    lcd.print(consKd, 1);   // print double directly with 2 decimals
+    
+    Serial.print("PID Compute output : ");
+    Serial.println(Output);
+    dimmer.setPower(Output);
+  }
   delay(1000);  
 }
