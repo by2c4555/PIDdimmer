@@ -64,7 +64,7 @@ void setup()
 
 
 //turn the PID on
-  myPID.SetMode(AUTOMATIC);
+  myPID.SetMode(MANUAL);
   myPID.SetOutputLimits(0, 100);  // Output will be between 0 and 100l
   myPID.SetTunings(consKp, consKi, consKd);
   delay(1000);
