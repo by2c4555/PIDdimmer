@@ -89,7 +89,7 @@ if (fault) {
 // Read Thermo Temp (convert raw RTD reading to temperature in °C)
   //Input = thermo.temperature(RNOMINAL, RREF);
 
-  double Input = thermo.temperature(RNOMINAL, RREF);
+  Input = thermo.temperature(RNOMINAL, RREF);
   Serial.print("Temperature Input : ");
   Serial.println(Input);
 
