@@ -5,10 +5,6 @@
 
 
 
-#define FAN_CONTROL_PIN  7
-#define WATER_CONTROL_PIN  8
-#define OVERHEAT 31
-
 
 // The value of the Rref resistor. Use 430.0 for PT100 and 4300.0 for PT1000
 #define RREF      430.0
@@ -53,12 +49,10 @@ void setup()
   lcd.print("PID Control");
   dimmer.begin(NORMAL_MODE, ON);
 
-  pinMode(FAN_CONTROL_PIN, OUTPUT);
-  pinMode(WATER_CONTROL_PIN, OUTPUT);
-
-
 //turn the PID on
-  myPID.SetMode(REVERSE);
+  myPID.SetMode(AUTOMATIC);
+  myPID.SetOutputLimits(0, 255);
+  myPID.SetControllerDirection(DIRECT);
   myPID.SetTunings(consKp, consKi, consKd);
 
 }
@@ -109,7 +103,7 @@ if (fault) {
   lcd.print("Temp=");
   lcd.print(Input, 0);   // print double directly with 2 decimals
   lcd.print('C');
-  lcd.print(' Set=');
+  lcd.print("Set=");
   lcd.print(Setpoint, 0);   // print double directly with 2 decimals
   lcd.print('C');
   lcd.setCursor(0, 1);
@@ -128,15 +122,7 @@ if (fault) {
 
 
   double write = map(Output, 0, 255, 0, 100);
-  double fanspeed = map(Output, 0, 255, 100, 0);
-  //Serial.print("PID mapping output : ");
-  //Serial.println(write);
-
-
   dimmer.setPower(write);
-  if(Input > OVERHEAT  ) {
-    analogWrite(FAN_CONTROL_PIN, fanspeed);
-    }
 }
 
    
