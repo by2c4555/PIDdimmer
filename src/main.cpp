@@ -18,8 +18,11 @@
 Adafruit_MAX31865 thermo = Adafruit_MAX31865(10);
 // The value of the RTD, in ohms, read from the MAX31865
 uint16_t rtd;
+// The fault code returned by the MAX31865
+uint8_t fault;
 // The ratio of the RTD resistance to the reference resistor
 float ratio;
+
 
 
 
@@ -36,7 +39,7 @@ LiquidCrystal_I2C lcd(0x27, 20, 4);
 //Define Variables we'll be connecting to
 double Setpoint = 30;
 double consKp=80, consKi=2.4, consKd=1.15;
-double Input, Output;
+double Input, Output, ReadTemp;;
 //Specify the links and initial tuning parameters
 PID myPID(&Input, &Output, &Setpoint, consKp, consKi, consKd, DIRECT);
 
@@ -76,7 +79,8 @@ void setup()
 void loop()
 {
 // Check and print any faults
-uint8_t fault = thermo.readFault();
+ReadTemp = thermo.temperature(RNOMINAL, RREF);
+fault = thermo.readFault();
 if (fault) {
     Serial.print("Fault 0x"); Serial.println(fault, HEX);
     rtd = thermo.readRTD();
@@ -85,8 +89,7 @@ if (fault) {
     ratio /= 32768;
     Serial.print("Ratio = "); Serial.println(ratio,8);
     Serial.print("Resistance = "); Serial.println(RREF*ratio,8);
-    Serial.print("Temperature Input : ");
-    Serial.println(Input);
+    Serial.print("Temperature = "); Serial.println(ReadTemp,2);
     Serial.print("PID Compute output : ");
     Serial.println(Output);
     if (fault & MAX31865_FAULT_HIGHTHRESH) {
@@ -109,8 +112,8 @@ if (fault) {
     }
     thermo.clearFault();
   }else {
-  // Read Thermo Temp (convert raw RTD reading to temperature in °C)
-    Input = thermo.temperature(RNOMINAL, RREF);
+  // Read the temperature from the MAX31865
+    Input = ReadTemp;
   // Calculate PID
     myPID.Compute();
   // Display results on the LCD
@@ -134,5 +137,5 @@ if (fault) {
     // Update the dimmer power based on PID output
     dimmer.setPower(Output);
   }
-  delay(1000);  
+  delay(5000);  
 }
