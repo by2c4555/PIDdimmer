@@ -40,16 +40,28 @@ void setup()
 {
   
   Serial.begin(9600);
-  thermo.begin(MAX31865_3WIRE);  // set to 2WIRE or 4WIRE as necessary    
+  delay(1000);
+  Serial.println("PID Control of PT100 with MAX31865 and Dimmer");
+  thermo.begin(MAX31865_3WIRE);  // set to 2WIRE or 4WIRE as necessary  
+  delay(1000);
+  Serial.println("MAX31865 3-Wire PT100 RTD Sensor --Initialized");  
   lcd.begin(20, 4);       //     lcd.begin(); for Arduino IDE        
   lcd.backlight();
   lcd.print("PID Control");
+  delay(1000);
+  Serial.println("LCD Display Initialized");
+
   dimmer.begin(NORMAL_MODE, ON);
+  delay(1000);
+  Serial.println("Dimmer Initialized");
+
 
 //turn the PID on
   myPID.SetMode(AUTOMATIC);
   myPID.SetOutputLimits(0, 100);  // Output will be between 0 and 100l
   myPID.SetTunings(consKp, consKi, consKd);
+  delay(1000);
+  Serial.println("PID Initialized");
 
 }
 
@@ -89,22 +101,22 @@ if (fault) {
   // Calculate PID
     myPID.Compute();
   // Display results on the LCD
-    lcd.clear();
+    lcd.clear(); // clear the display
     lcd.setCursor(0, 0); // set the cursor to column 0, line 0
     lcd.print("Temp=");
-    lcd.print(Input, 0);   // print double directly with 2 decimals
+    lcd.print(Input, 0);   // print double directly with 0 decimals
     lcd.print('C');
-    lcd.print("Set=");
-    lcd.print(Setpoint, 0);   // print double directly with 2 decimals
+    lcd.print(" Set=");
+    lcd.print(Setpoint, 0);   // print double directly with 0 decimals
     lcd.print('C');
     lcd.setCursor(0, 1); // set the cursor to column 0, line 1
     lcd.print("  Kp=");
-    lcd.print(consKp, 0);   // print double directly with 2 decimals
+    lcd.print(consKp, 0);   // print double directly with 0 decimals
     lcd.print("  Ki=");
-    lcd.print(consKi, 1);   // print double directly with 2 decimals
+    lcd.print(consKi, 1);   // print double directly with 1 decimal
     lcd.setCursor(0, 2);
     lcd.print("  Kd=");
-    lcd.print(consKd, 1);   // print double directly with 2 decimals
+    lcd.print(consKd, 1);   // print double directly with 1 decimal
     
     // Update the dimmer power based on PID output
     dimmer.setPower(Output);
