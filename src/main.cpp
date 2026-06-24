@@ -1,5 +1,6 @@
 #include <LiquidCrystal_I2C.h>
 #include <Adafruit_MAX31865.h>  // https://github.com/adafruit/Adafruit_MAX31865/tree/master
+                                // https://learn.adafruit.com/adafruit-max31865-rtd-pt100-amplifier?view=all
 #include <RBDdimmer.h>
 #include <PID_v1.h>
 
@@ -43,6 +44,7 @@ void setup()
   delay(1000);
   Serial.println("PID Control of PT100 with MAX31865 and Dimmer");
   thermo.begin(MAX31865_3WIRE);  // set to 2WIRE or 4WIRE as necessary  
+  thermo.calculateTemperature(RNOMINAL, RREF);
   delay(1000);
   Serial.println("MAX31865 3-Wire PT100 RTD Sensor --Initialized");  
   lcd.begin(20, 4);       //     lcd.begin(); for Arduino IDE        
