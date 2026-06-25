@@ -2,7 +2,7 @@
 #include <Adafruit_MAX31865.h>  // https://github.com/adafruit/Adafruit_MAX31865/tree/master
                                 // https://learn.adafruit.com/adafruit-max31865-rtd-pt100-amplifier?view=all
 #include <RBDdimmer.h>
-#include <PID_v1.h>
+#include <SimplePID_v1.h>
 
 
 
