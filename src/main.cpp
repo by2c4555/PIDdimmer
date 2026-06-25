@@ -126,13 +126,9 @@ if (fault) {
     lcd.print(Setpoint, 0);   // print double directly with 0 decimals
     lcd.print('C');
     lcd.setCursor(0, 1); // set the cursor to column 0, line 1
-    lcd.print("  Kp=");
-    lcd.print(consKp, 0);   // print double directly with 0 decimals
-    lcd.print("  Ki=");
-    lcd.print(consKi, 1);   // print double directly with 1 decimal
-    lcd.setCursor(0, 2);
-    lcd.print("  Kd=");
-    lcd.print(consKd, 1);   // print double directly with 1 decimal
+    lcd.print("Output Power = ");
+    lcd.print(Output, 0);   // print double directly with 0 decimals
+    lcd.print('%');
     
     // Update the dimmer power based on PID output
     dimmer.setPower(Output);
