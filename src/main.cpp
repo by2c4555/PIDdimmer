@@ -37,9 +37,18 @@ dimmerLamp dimmer(DIMMER_PIN);
 LiquidCrystal_I2C lcd(0x27, 20, 4);
  
 //Define Variables we'll be connecting to
-float Setpoint = 30;
-float consKp=80, consKi=2.4, consKd=1.15;
 float Input, Output, ReadTemp;;
+// วิธีการหาค่า Manual Tuning 
+// 1. ปิดค่า Ki และ Kd ให้เป็น 0
+// 2. หาค่า Kp: ค่อยๆ ปรับ Kp เพิ่มขึ้นจนอุณหภูมิวิ่งขึ้นไปนิ่งต่ำกว่า 67 °C เล็กน้อย (เช่น นิ่งที่ 64 °C หรือ 65 °C) โดยไม่มีการแกว่งเลย
+// 3. เพิ่มค่า  Kd: ค่อยๆ ใส่ค่า Kd เพื่อช่วยให้กราฟการเข้าสู่ Setpoint นุ่มนวลขึ้นและชันน้อยลงในช่วงปลาย
+// 4. เพิ่มค่า Ki เป็นลำดับสุดท้าย: ค่อยๆ เพิ่มค่า Ki ทีละนิด เพื่อดึงอุณหภูมิที่นิ่งค้างอยู่ (เช่น 65 °C) ให้ไต่ขึ้นไปถึง 67 °C อย่างช้าๆ
+float Setpoint = ุ67.0; // Setpoint temperature in Celsius
+float consKp=6, consKi=0.005, consKd=120.0;
+// สำหรับต้มน้ำ 30 ลิตร
+// Kp (Proportional Gain) ค่าประมาณ 4.0 ถึง 6.0 
+// Ki (Integral Gain)  ค่าประมาณ 0.001 ถึง 0.005
+// Kd (Derivative Gain)  ค่าประมาณ  80.0 ถึง 120.0
 //Specify the links and initial tuning parameters
 SimplePID_v1 myPID(&Input, &Output, consKp, consKi, consKd);
 
