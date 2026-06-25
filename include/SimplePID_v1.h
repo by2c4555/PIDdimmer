@@ -37,8 +37,8 @@
 // ทิศทางการควบคุม (Action)
 //  PID_DIRECT  : input ต่ำกว่า setpoint → output เพิ่ม (งานให้ความร้อน เช่น ฮีตเตอร์)
 //  PID_REVERSE : input มากกว่า setpoint → output เพิ่ม (งานทำความเย็น เช่น พัดลม/คอมเพรสเซอร์)
-#define PID_DIRECT  0
-#define PID_REVERSE 1
+#define PID_DIRECT  false
+#define PID_REVERSE true
 
 class SimplePID_v1
 {
@@ -53,7 +53,7 @@ class SimplePID_v1
     float _iSum;               // ผลรวม error ดิบ (ยังไม่คูณ Ki) เพื่อให้เปลี่ยน Ki ได้โดยไม่ต้อง reset
     float _lastInput;          // input รอบก่อน (ใช้ derivative on measurement)
 
-    int _dir;                  // ทิศทาง: +1 = DIRECT, -1 = REVERSE
+    bool _reverse;             // ทิศทาง: false = DIRECT, true = REVERSE
 
     unsigned long _sampleTime; // คาบเวลา (ms)
     unsigned long _lastTime;   // เวลาคำนวณครั้งก่อน
@@ -74,7 +74,7 @@ class SimplePID_v1
       _iSum       = 0.0f;
       _lastInput  = 0.0f;
 
-      _dir        = +1;       // DIRECT เป็นค่าเริ่มต้น
+      _reverse    = false;    // DIRECT เป็นค่าเริ่มต้น
 
       _sampleTime = 100;      // 100 ms
       _lastTime   = 0;
@@ -106,16 +106,15 @@ class SimplePID_v1
     //  - DIRECT  : input < setpoint → output เพิ่ม (ให้ความร้อน)
     //  - REVERSE : input > setpoint → output เพิ่ม (ทำความเย็น)
     // เรียกได้ตลอดเวลา (จะ flip ค่า integral ที่สะสมไว้ให้อัตโนมัติ ไม่กระตุก)
-    void setControllerDirection(int direction)
+    void setControllerDirection(bool direction)
     {
-      int newDir = (direction == PID_REVERSE) ? -1 : +1;
-      if (newDir != _dir)
+      if (direction != _reverse)
       {
         _iSum = -_iSum;   // สลับทิศทาง error ที่สะสมไว้ ให้ต่อเนื่อง
-        _dir  = newDir;
+        _reverse = direction;
       }
     }
-    int getDirection() const { return (_dir < 0) ? PID_REVERSE : PID_DIRECT; }
+    bool getDirection() const { return _reverse; }
 
     // กำหนดช่วง output ที่อนุญาต (min, max) ค่าเริ่มต้น 0-255
     void setOutputLimits(float minOut, float maxOut)
@@ -154,7 +153,8 @@ class SimplePID_v1
       if (timeChange < _sampleTime) return false;  // ยังไม่ถึงเวลาคำนวณ
 
       float input = *_input;
-      float error = _dir * (_setpoint - input);   // คูณทิศทาง (DIRECT/REVERSE)
+      float error = (_setpoint - input);          // ค่า error ปกติ (DIRECT)
+      if (_reverse) error = -error;               // REVERSE: กลับทิศทาง
 
       // ส่วน Integral: เก็บผลรวม error ดิบ (ยังไม่คูณ Ki)
       // ข้อดี: เปลี่ยน Ki ระหว่างรันได้เลย integral term ปรับตามทันที ไม่ต้อง reset
@@ -163,7 +163,8 @@ class SimplePID_v1
 
       // ส่วน Derivative: คิดจากการเปลี่ยนแปลงของ input (derivative on measurement)
       // คูณทิศทางด้วยเพื่อให้สอดคล้องกับ DIRECT/REVERSE
-      float dInput = _dir * (input - _lastInput);
+      float dInput = input - _lastInput;
+      if (_reverse) dInput = -dInput;
 
       // รวมผล PID
       float output = (_kp * error) + (_ki * _iSum) - (_kd * dInput);
