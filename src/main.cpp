@@ -67,6 +67,7 @@ void setup()
 
 
 //turn the PID on
+  myPID.setSetpoint(Setpoint);
   myPID.setOutputLimits(0, 85); // Limit output to 0-85 for dimmer
   myPID.setSampleTime(1000); // Set sample time to 1 second
   myPID.setControllerDirection(PID_DIRECT);
@@ -129,9 +130,7 @@ if (fault) {
     lcd.print("Output Power = ");
     lcd.print(Output, 0);   // print double directly with 0 decimals
     lcd.print('%');
-    
     // Update the dimmer power based on PID output
     dimmer.setPower(Output);
-
   }
 }
