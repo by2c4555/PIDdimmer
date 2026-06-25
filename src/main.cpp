@@ -81,6 +81,7 @@ void loop()
 // Check and print any faults
 ReadTemp = thermo.temperature(RNOMINAL, RREF);
 fault = thermo.readFault();
+Input = ReadTemp;
 if (fault) {
     Serial.print("Fault 0x"); Serial.println(fault, HEX);
     rtd = thermo.readRTD();
@@ -113,7 +114,7 @@ if (fault) {
     thermo.clearFault();
   }else {
   // Read the temperature from the MAX31865
-    Input = ReadTemp;
+  // Input = ReadTemp;
   // Calculate PID
     myPID.Compute();
   // Display results on the LCD
