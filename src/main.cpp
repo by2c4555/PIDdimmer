@@ -44,7 +44,27 @@ float Input, Output, ReadTemp;;
 SimplePID_v1 myPID(&Input, &Output, consKp, consKi, consKd);
 
 
+void UpdateDimmerPeriodically(int Power) 
+{
+  // This function checks if 500 milliseconds have passed since the last dimmer reset. If so, it resets the dimmer state and updates the power based on the latest PID output.
+  static unsigned long lastDimmerReset = 0; 
+  const unsigned long dimmerResetInterval = 500; // 500 milliseconds
+  
+  unsigned long currentMillis = millis();
 
+  // Check if 500 milliseconds have passed since the last dimmer reset
+  if (currentMillis - lastDimmerReset >= dimmerResetInterval) 
+  {
+    lastDimmerReset = currentMillis; // Update the last reset time
+    
+    // Reset the dimmer state
+    dimmer.setState(OFF);
+    dimmer.setState(ON);
+    
+    // Update the dimmer power based on the latest PID output
+    dimmer.setPower(Power); 
+  }
+}
 
 
 void setup()
@@ -131,9 +151,6 @@ if (fault) {
     lcd.print(Output, 0);   // print double directly with 0 decimals
     lcd.print('%');
     // Update the dimmer power based on PID output
-    dimmer.setState(OFF);
-    dimmer.setPower(Output);
-    dimmer.setState(ON);
-
+    UpdateDimmerPeriodically((int)Output); // Cast Output to int for dimmer power
   }
 }
