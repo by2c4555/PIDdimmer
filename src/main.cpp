@@ -46,9 +46,9 @@ SimplePID_v1 myPID(&Input, &Output, consKp, consKi, consKd);
 
 
 
+
 void setup()
 {
-  
   Serial.begin(9600);
   delay(1000);
   Serial.println("PID Control of PT100 with MAX31865 and Dimmer");
@@ -131,6 +131,9 @@ if (fault) {
     lcd.print(Output, 0);   // print double directly with 0 decimals
     lcd.print('%');
     // Update the dimmer power based on PID output
+    dimmer.setState(OFF);
     dimmer.setPower(Output);
+    dimmer.setState(ON);
+
   }
 }
