@@ -37,11 +37,11 @@ dimmerLamp dimmer(DIMMER_PIN);
 LiquidCrystal_I2C lcd(0x27, 20, 4);
  
 //Define Variables we'll be connecting to
-double Setpoint = 30;
-double consKp=80, consKi=2.4, consKd=1.15;
-double Input, Output, ReadTemp;;
+float Setpoint = 30;
+float consKp=80, consKi=2.4, consKd=1.15;
+float Input, Output, ReadTemp;;
 //Specify the links and initial tuning parameters
-PID myPID(&Input, &Output, &Setpoint, consKp, consKi, consKd, DIRECT);
+SimplePID_v1 myPID(&Input, &Output, consKp, consKi, consKd);
 
 
 
@@ -67,9 +67,9 @@ void setup()
 
 
 //turn the PID on
-  myPID.SetMode(MANUAL);
-  myPID.SetOutputLimits(0, 100);  // Output will be between 0 and 100l
-  myPID.SetTunings(consKp, consKi, consKd);
+  myPID.setOutputLimits(0, 85); // Limit output to 0-85 for dimmer
+  myPID.setSampleTime(1000); // Set sample time to 1 second
+  myPID.setControllerDirection(PID_DIRECT);
   delay(1000);
   Serial.println("PID Initialized");
 
@@ -81,7 +81,6 @@ void loop()
 // Check and print any faults
 ReadTemp = thermo.temperature(RNOMINAL, RREF);
 fault = thermo.readFault();
-Input = ReadTemp;
 if (fault) {
     Serial.print("Fault 0x"); Serial.println(fault, HEX);
     rtd = thermo.readRTD();
@@ -114,9 +113,9 @@ if (fault) {
     thermo.clearFault();
   }else {
   // Read the temperature from the MAX31865
-  // Input = ReadTemp;
+  Input = ReadTemp;
   // Calculate PID
-    myPID.Compute();
+    myPID.compute();
   // Display results on the LCD
     lcd.clear(); // clear the display
     lcd.setCursor(0, 0); // set the cursor to column 0, line 0
@@ -137,6 +136,6 @@ if (fault) {
     
     // Update the dimmer power based on PID output
     dimmer.setPower(Output);
+
   }
-  delay(5000);  
 }
