@@ -68,7 +68,6 @@ void UpdateDimmerPeriodically(int Power)
     
     // Reset the dimmer state
     dimmer.setState(OFF);
-    delay(10); // Short delay to ensure the dimmer state is reset
     dimmer.setState(ON);
     
     // Update the dimmer power based on the latest PID output
